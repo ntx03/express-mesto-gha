@@ -19,10 +19,11 @@ app.use((req, res, next) => {
   };
   next();
 });
-
 app.use(router);
 app.use(routerCard);
-
+app.use('*', (req, res, next) => {
+  res.status(404).send({ message: 'страница не нейдена' });
+})
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`)

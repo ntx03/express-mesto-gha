@@ -13,27 +13,27 @@ const allUsers = (req, res, next) => {
 
 const user = (req, res, next) => {
   const { userId } = req.params;
-  User.findById(userId)
+  return User.findById(userId)
     .then((user) => {
-      if (user === null) {
+      res.status(200).send(
+        {
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id
+        }
+      )
+    }
+    )
+    .catch((err) => {
+      if (err.name === 'CastError') {
         res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
         return;
-      } else {
-        res.status(200).send(
-          {
-            name: user.name,
-            about: user.about,
-            avatar: user.avatar,
-            _id: user._id
-          }
-        )
       }
-    })
-    .catch((err) => {
-      if (err.statusCode === 500) {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    })
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
+      return;
+    }
+    )
 };
 
 const createUser = (req, res, next) => {
