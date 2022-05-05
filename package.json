@@ -10,7 +10,7 @@
     "nodemon": "^2.0.15"
   },
   "name": "andrey",
-  "description": "[![Tests](https://github.com/ntx03/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
+  "description": "[![Tests](https://github.com/ntx03/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/ntx03/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/ntx03/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/ntx03/express-mesto-gha/actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
   "version": "0.0.1",
   "main": "app.js",
   "scripts": {
