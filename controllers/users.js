@@ -13,7 +13,7 @@ const allUsers = (req, res, next) => {
 
 const user = (req, res, next) => {
   const { userId } = req.params;
-  return User.findById(userId)
+  User.findById(userId)
     .then((user) => {
       res.status(200).send(
         {
@@ -23,17 +23,21 @@ const user = (req, res, next) => {
           _id: user._id
         }
       )
-    }
-    )
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
+        res.status(400).send(`${err.message}`);
+        return;
+      }
+      if (err.name === 'NotFound') {
         res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
         return;
       }
-      res.status(500).send({ message: 'На сервере произошла ошибка' });
-      return;
-    }
-    )
+      if (err.statusCode === 500) {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
+        return;
+      }
+    })
 };
 
 const createUser = (req, res, next) => {
@@ -65,9 +69,7 @@ const updateProfileUser = (req, res, next) => {
       res.status(200).json({
         data: {
           name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id
+          about: user.about
         }, message: 'Профиль обновлен'
       });
     })
@@ -89,10 +91,7 @@ const updateProfileAvatar = (req, res, next) => {
     .then((user) => {
       res.status(200).json({
         data: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-          _id: user._id
+          avatar: user.avatar
         }, message: 'Профиль обновлен'
       });
     })

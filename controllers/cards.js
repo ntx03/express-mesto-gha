@@ -55,13 +55,13 @@ const likeCard = (req, res, next) => {
   ).orFail(() => { res.status(404).send({ message: 'Передан несуществующий _id карточки' }); })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' });
         return;
       }
       if (err.statusCode === 500) {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
-        return;
+
       }
     })
 }
