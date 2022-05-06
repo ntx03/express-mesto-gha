@@ -64,14 +64,14 @@ const createUser = (req, res, next) => {
 
 const updateProfileUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true })
     .orFail(() => { res.status(404).send({ message: 'Пользователь с указанным _id не найден' }); })
     .then((user) => {
       res.status(200).json({
         data: {
           name: user.name,
           about: user.about
-        }, message: 'Профиль обновлен'
+        }
       });
     })
     .catch((err) => {
@@ -87,13 +87,13 @@ const updateProfileUser = (req, res, next) => {
 
 const updateProfileAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true })
     .orFail(() => { res.status(404).send({ message: 'Пользователь с указанным _id не найден' }); })
     .then((user) => {
       res.status(200).json({
         data: {
           avatar: user.avatar
-        }, message: 'Профиль обновлен'
+        }
       });
     })
     .catch((err) => {
