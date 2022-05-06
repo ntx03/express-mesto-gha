@@ -1,9 +1,9 @@
 const Card = require('../models/card');
 
-const allCard = (req, res) => {
+const allCard = (req, res, next) => {
   Card.find({})
     .then((cards) => res.status(200).send(cards))
-    .catch(res.status(500).send({ message: 'На сервере произошла ошибка' }));
+    .catch(next);
 };
 
 const createCard = (req, res) => {

@@ -1,9 +1,9 @@
 const User = require('../models/user');
 
-const allUsers = (req, res) => {
+const allUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.status(200).send(users))
-    .catch(res.status(500).send({ message: 'На сервере произошла ошибка' }));
+    .catch(next);
 };
 
 const user = (req, res) => {
