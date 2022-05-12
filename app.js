@@ -2,32 +2,31 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
+const serverError = require('./middlewares/serverError');
 
 // Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
 
+// создаем сервер на фреймворке express
 const app = express();
 
+// подключаемся к базе данных MongoDB
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
+// преобразование в строку
 app.use(express.json());
+
+// подключаем роуты
 app.use(router);
+
+// обрабатываем ошибки с предварительной валидации данных перед контрооллерами
 app.use(errors());
+
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-});
+// обрататываем общие ошибки
+app.use(serverError);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

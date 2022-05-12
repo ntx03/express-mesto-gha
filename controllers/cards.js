@@ -2,13 +2,13 @@ const BadRequest = require('../errors/BadRequest');
 const NotFound = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
 const Card = require('../models/card');
-
+// достаем все карточки
 const allCard = (req, res, next) => {
   Card.find({})
     .then((cards) => res.status(200).send(cards))
     .catch(next);
 };
-
+// создаем карточку
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
@@ -21,7 +21,7 @@ const createCard = (req, res, next) => {
     })
     .catch(next);
 };
-
+// удаляем карточку
 const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   Card.findById(cardId).orFail(() => { throw new NotFound('карточка не найдена'); })
@@ -40,7 +40,7 @@ const deleteCard = (req, res, next) => {
       next(err);
     });
 };
-
+// ставим лайк карточке
 const likeCard = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user._id;
@@ -57,7 +57,7 @@ const likeCard = (req, res, next) => {
       next(err);
     });
 };
-
+// убираем лайк карточке
 const dislikeCard = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user._id;
