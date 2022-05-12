@@ -39,8 +39,8 @@ const deleteCard = (req, res, next) => {
       if (err.name === 'CastError') {
         throw new BadRequest('Карточка с указанным _id не найдена');
       }
-    })
-    .catch(next);
+      next(err);
+    });
 };
 
 const likeCard = (req, res, next) => {
