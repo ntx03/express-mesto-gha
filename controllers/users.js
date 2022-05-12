@@ -19,30 +19,24 @@ const allUsers = (req, res, next) => {
 // находим пользователя по ID
 const findUserId = (req, res, next) => {
   const { userId } = req.params;
-  User.findById(userId).orFail(() => {
-    throw new NotFound('Пользователь не найден')
-      // eslint-disable-next-line no-shadow
-      .then((user) => {
-        if (user === null) {
-          throw new NotFound('Пользователь по указанному _id не найден');
-        } else {
-          res.status(200).send(
-            {
-              name: user.name,
-              about: user.about,
-              avatar: user.avatar,
-              _id: user._id,
-            },
-          );
-        }
-      })
-      .catch((err) => {
-        if (err.name === 'CastError') {
-          throw new BadRequest('Пользователь по указанному _id не найден');
-        }
-      })
-      .catch(next);
-  });
+  User.findById(userId).orFail(() => { throw new NotFound('Пользователь по указанному _id не найден'); })
+    // eslint-disable-next-line no-shadow
+    .then((user) => {
+      res.status(200).send(
+        {
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          _id: user._id,
+        },
+      );
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        throw new BadRequest('Пользователь по указанному _id не найден');
+      }
+      next(err);
+    });
 };
 
 // создаем пользователя
@@ -138,7 +132,7 @@ const updateProfileAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new BadRequest('Переданы некорректные данные при авторизации');
+    throw new AuthError('Неверный логин или пароль');
   }
   User.findUserByCredentials(email, password)
     // eslint-disable-next-line no-shadow
