@@ -24,13 +24,11 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId).orFail(() => { throw new NotFound('карточка не найдена'); })
     .then((card) => {
-      if (card === null) {
-        throw new NotFound('Карточка с указанным _id не найдена.');
-      }
       if (card.owner.toString() === req.user._id) {
-        res.status(200).send(card);
+        Card.findByIdAndRemove(cardId)
+          .then((item) => { res.status(200).send(item); });
       } else {
         throw new Forbidden('В доступе отказано');
       }

@@ -43,9 +43,6 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  if (!email || !password) {
-    throw new BadRequest('Переданы некорректные данные при создании пользователя.');
-  }
   bcrypt.hash(password, SALT_ROUNDS)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
@@ -130,9 +127,6 @@ const updateProfileAvatar = (req, res, next) => {
 // проходим авторизацию
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new BadRequest('Переданы некорректные данные');
-  }
   User.findUserByCredentials(email, password)
     // eslint-disable-next-line no-shadow
     .then((user) => {
@@ -143,7 +137,7 @@ const login = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ReferenceError') {
-        throw new AuthError('Неверный логин или пароль1');
+        throw new AuthError('Неверный логин или пароль');
       }
       if (err.name === 'ValidationError') {
         throw new BadRequest('Переданы некорректные данные');

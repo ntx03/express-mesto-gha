@@ -4,9 +4,11 @@ const { errors } = require('celebrate');
 const auth = require('./middlewares/auth');
 const router = require('./routes/users');
 const routerCard = require('./routes/cards');
+const { validationLogin, validationCreateUser } = require('./middlewares/validation');
 const {
   login, createUser,
 } = require('./controllers/users');
+const NotFound = require('./errors/NotFound');
 // Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
 
@@ -17,13 +19,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(express.json());
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', validationLogin, login);
+app.post('/signup', validationCreateUser, createUser);
 app.use(auth);
 app.use(router);
 app.use(routerCard);
-app.use('*', (req, res) => {
-  res.status(404).send({ message: 'страница не найдена' });
+app.use('*', () => {
+  throw new NotFound('Cтраница не найдена');
 });
 app.use(errors());
 // eslint-disable-next-line no-unused-vars
