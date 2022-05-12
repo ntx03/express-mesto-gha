@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator:
+        // eslint-disable-next-line no-useless-escape
+        (email) => /^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/.test(email),
+      message: 'Некорректный адрес email',
+    },
   },
   password: {
     type: String,
@@ -31,6 +37,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator:
+        // eslint-disable-next-line no-useless-escape
+        (url) => /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(url),
+      message: 'Некорректный адрес URL',
+    },
   },
 });
 

@@ -23,7 +23,7 @@ app.use(auth);
 app.use(router);
 app.use(routerCard);
 app.use('*', (req, res) => {
-  res.status(404).send({ message: 'страница не нейдена' });
+  res.status(404).send({ message: 'страница не найдена' });
 });
 app.use(errors());
 // eslint-disable-next-line no-unused-vars
