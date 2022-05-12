@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { userIdValidation, updateProfileUserValidation } = require('../middlewares/validation');
+const { userIdValidation, updateProfileUserValidation, updateProfileAvatarValidation } = require('../middlewares/validation');
 
 const {
   allUsers, findUserId, updateProfileUser, updateProfileAvatar, getUser,
@@ -13,6 +13,6 @@ router.get('/users/:userId', userIdValidation, findUserId);
 // обновляем профиль пользователя(имя и о себе)
 router.patch('/users/me', updateProfileUserValidation, updateProfileUser);
 // обновляем профиль аватара пользователя
-router.patch('/users/me/avatar', updateProfileAvatar);
+router.patch('/users/me/avatar', updateProfileAvatarValidation, updateProfileAvatar);
 
 module.exports = router;
