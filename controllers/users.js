@@ -142,7 +142,6 @@ const login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      res.send(err.name);
       if (err.name === 'ReferenceError') {
         throw new AuthError('Неверный логин или пароль1');
       }
