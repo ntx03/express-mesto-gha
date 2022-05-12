@@ -4,7 +4,6 @@ const AuthError = require('../errors/AuthError');
 const BadRequest = require('../errors/BadRequest');
 const Conflict = require('../errors/Conflict');
 const NotFound = require('../errors/NotFound');
-const user = require('../models/user');
 const User = require('../models/user');
 
 const SALT_ROUNDS = 10;
@@ -72,7 +71,7 @@ const createUser = (req, res, next) => {
 
 // получаем информацию о текущем пользователе
 const getUser = (req, res, next) => {
-  user.findById(req.user._id).orFail(() => { throw new NotFound('Пользователь не найден'); })
+  User.findById(req.user._id).orFail(() => { throw new NotFound('Пользователь не найден'); })
     // eslint-disable-next-line no-shadow
     .then((user) => {
       res.status(200).json(user);
@@ -132,7 +131,7 @@ const updateProfileAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new AuthError('Неверный логин или пароль');
+    throw new BadRequest('Переданы некорректные данные');
   }
   User.findUserByCredentials(email, password)
     // eslint-disable-next-line no-shadow
@@ -145,6 +144,9 @@ const login = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ReferenceError') {
         throw new AuthError('Неверный логин или пароль');
+      }
+      if (err.name === 'ValidationError') {
+        throw new BadRequest('Переданы некорректные данные');
       }
     })
     .catch(next);
