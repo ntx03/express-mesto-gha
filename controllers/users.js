@@ -146,7 +146,7 @@ const login = (req, res, next) => {
         throw new AuthError('Неверный логин или пароль');
       }
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные');
+        throw new AuthError('Неверный логин или пароль');
       }
     })
     .catch(next);
