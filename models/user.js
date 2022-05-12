@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator:
-        // eslint-disable-next-line no-useless-escape
-        (email) => /^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$/.test(email),
-      message: 'Некорректный адрес email',
-    },
+    validate: [validator.isEmail, 'Не правильный Email.'],
   },
   password: {
     type: String,
@@ -61,7 +57,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
             return res.status(401).send({ message: 'Неправильные почта или пароль' });
           }
 
-          return user; // теперь user доступен
+          return user;
         });
     });
 };

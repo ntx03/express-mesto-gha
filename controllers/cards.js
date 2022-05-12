@@ -30,9 +30,9 @@ const deleteCard = (req, res, next) => {
         throw new NotFound('Карточка с указанным _id не найдена.');
       }
       if (card.owner.toString() === req.user._id) {
-        throw new Forbidden('В доступе отказано');
-      } else {
         res.status(200).send(card);
+      } else {
+        throw new Forbidden('В доступе отказано');
       }
     })
     .catch((err) => {

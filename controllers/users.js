@@ -141,14 +141,6 @@ const login = (req, res, next) => {
       // вернём токен
       res.send({ token });
     })
-    .catch((err) => {
-      if (err.name === 'ReferenceError') {
-        throw new AuthError('Неверный логин или пароль');
-      }
-      if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные');
-      }
-    })
     .catch(next);
 };
 
