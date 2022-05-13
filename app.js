@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const router = require('./routes/index');
 const serverError = require('./middlewares/serverError');
+const { requestLogger, errorLogger } = require('./middlewares/Logger');
 
 // Слушаем 3000 порт
 const { PORT = 3000 } = process.env;
@@ -18,10 +19,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 // преобразование в строку
 app.use(express.json());
 
+// логгер запросов на сервер
+app.use(requestLogger);
+
 // подключаем роуты
 app.use(router);
 
-// обрабатываем ошибки с предварительной валидации данных перед контрооллерами
+// подключаем логгер ошибок
+app.use(errorLogger);
+
+// обработчик ошибок celebrate
 app.use(errors());
 
 // eslint-disable-next-line no-unused-vars
