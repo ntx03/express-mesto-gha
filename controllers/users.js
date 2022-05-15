@@ -4,8 +4,6 @@ const AuthError = require('../errors/AuthError');
 const BadRequest = require('../errors/BadRequest');
 const Conflict = require('../errors/Conflict');
 const NotFound = require('../errors/NotFound');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 
 const SALT_ROUNDS = 10;
@@ -133,7 +131,7 @@ const login = (req, res, next) => {
     // eslint-disable-next-line no-shadow
     .then((user) => {
       // создадим токен
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       // вернём токен
       res.send({ token });
     })
