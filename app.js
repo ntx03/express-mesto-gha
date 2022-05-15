@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const router = require('./routes/index');
 const serverError = require('./middlewares/serverError');
 const { requestLogger, errorLogger } = require('./middlewares/Logger');
@@ -10,6 +12,9 @@ const { PORT = 3000 } = process.env;
 
 // создаем сервер на фреймворке express
 const app = express();
+
+// подключаем Cors
+app.use(cors());
 
 // подключаемся к базе данных MongoDB
 mongoose.connect('mongodb://localhost:27017/mestodb', {
