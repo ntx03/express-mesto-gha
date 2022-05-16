@@ -6,11 +6,10 @@ const { validationLogin, validationCreateUser } = require('../middlewares/valida
 const {
   login, createUser,
 } = require('../controllers/users');
-//const auth = require('../middlewares/auth');
 
 router.post('/signin', validationLogin, login);
 router.post('/signup', validationCreateUser, createUser);
-//router.use(auth);
+
 router.use('/', usersRouter);
 router.use('/', cardsRouter);
 
