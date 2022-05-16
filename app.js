@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const router = require('./routes/index');
@@ -19,6 +20,9 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 // подключаем Cors
 app.use(cors());
+
+// настраиваем заголовки
+app.use(helmet());
 
 // краш-тест сервера
 app.get('/crash-test', () => {
