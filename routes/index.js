@@ -10,9 +10,8 @@ const auth = require('../middlewares/auth');
 
 router.post('/signin', validationLogin, login);
 router.post('/signup', validationCreateUser, createUser);
-router.use(auth);
 router.use('/', usersRouter);
-router.use('/', cardsRouter);
+router.use('/', auth, cardsRouter);
 
 router.use((req, res, next) => {
   next(new NotFound('Запрашиваемая страница не существует'));
