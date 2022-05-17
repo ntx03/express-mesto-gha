@@ -57,11 +57,9 @@ const likeCard = (req, res, next) => {
 };
 // убираем лайк карточке
 const dislikeCard = (req, res, next) => {
-  const { cardId } = req.params;
-  const { _id } = req.user._id;
   Card.findByIdAndUpdate(
-    cardId,
-    { $pull: { likes: _id } },
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
     { new: true },
   ).orFail(() => { throw new NotFound('Передан несуществующий _id карточки'); })
     .then((card) => res.status(200).send(card))
