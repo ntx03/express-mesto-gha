@@ -94,6 +94,7 @@ const updateProfileUser = (req, res, next) => {
         data: {
           name: user.name,
           about: user.about,
+          avatar: user.avatar,
         },
       });
     })
@@ -114,6 +115,8 @@ const updateProfileAvatar = (req, res, next) => {
     .then((user) => {
       res.status(200).json({
         data: {
+          name: user.name,
+          about: user.about,
           avatar: user.avatar,
         },
       });
