@@ -91,11 +91,9 @@ const updateProfileUser = (req, res, next) => {
     // eslint-disable-next-line no-shadow
     .then((user) => {
       res.status(200).json({
-        data: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-        },
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
       });
     })
     .catch((err) => {
@@ -114,11 +112,9 @@ const updateProfileAvatar = (req, res, next) => {
     // eslint-disable-next-line no-shadow
     .then((user) => {
       res.status(200).json({
-        data: {
-          name: user.name,
-          about: user.about,
-          avatar: user.avatar,
-        },
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
       });
     })
     .catch((err) => {
