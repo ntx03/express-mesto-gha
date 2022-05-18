@@ -16,10 +16,9 @@ const createCard = (req, res, next) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при создании карточки.');
-      }
-    })
-    .catch(next);
+        next(new BadRequest('Переданы некорректные данные при создании карточки.'));
+      } else { next(err); }
+    });
 };
 // удаляем карточку
 const deleteCard = (req, res, next) => {
@@ -27,17 +26,17 @@ const deleteCard = (req, res, next) => {
   Card.findById(cardId).orFail(() => { throw new NotFound('карточка не найдена'); })
     .then((card) => {
       if (card.owner.toString() === req.user._id) {
-        Card.findByIdAndRemove(cardId)
+        return Card.findByIdAndRemove(cardId)
           .then((item) => { res.status(200).send(item); });
-      } else {
-        throw new Forbidden('В доступе отказано');
       }
+      throw new Forbidden('В доступе отказано');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Карточка с указанным _id не найдена');
+        next(new BadRequest('Карточка с указанным _id не найдена'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 // ставим лайк карточке
@@ -50,9 +49,10 @@ const likeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные для постановки лайка');
+        next(new BadRequest('Переданы некорректные данные для постановки лайка'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 // убираем лайк карточке
@@ -65,9 +65,10 @@ const dislikeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные для постановки лайка');
+        next(new BadRequest('Переданы некорректные данные для постановки лайка'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 

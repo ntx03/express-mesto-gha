@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const AuthError = require('../errors/AuthError');
 const BadRequest = require('../errors/BadRequest');
 const Conflict = require('../errors/Conflict');
 const NotFound = require('../errors/NotFound');
@@ -34,9 +33,10 @@ const findUserId = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequest('Пользователь по указанному _id не найден');
+        next(new BadRequest('Пользователь по указанному _id не найден'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -59,13 +59,14 @@ const createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.code === 11000) {
-        throw new Conflict('Такой пользователь уже существует');
+        next(new Conflict('Такой пользователь уже существует'));
       }
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при создании пользователя!.');
+        next(new BadRequest('Переданы некорректные данные при создании пользователя!.'));
+      } else {
+        next(err);
       }
-    })
-    .catch(next);
+    });
 };
 
 // получаем информацию о текущем пользователе
@@ -77,10 +78,9 @@ const getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении профиля');
-      }
-    })
-    .catch(next);
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля'));
+      } else { next(err); }
+    });
 };
 
 // обновляем данные пользователя имя и о себе
@@ -98,10 +98,9 @@ const updateProfileUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении профиля');
-      }
-    })
-    .catch(next);
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля'));
+      } else { next(err); }
+    });
 };
 
 // обновляем данные пользователя аватар
@@ -119,10 +118,9 @@ const updateProfileAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении профиля');
-      }
-    })
-    .catch(next);
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля'));
+      } else { next(err); }
+    });
 };
 
 // проходим авторизацию
@@ -135,14 +133,6 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       // вернём токен
       res.send({ token });
-    })
-    .catch((err) => {
-      if (err.name === 'ReferenceError') {
-        throw new AuthError('Неверный логин или пароль');
-      }
-      if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные');
-      }
     })
     .catch(next);
 };
