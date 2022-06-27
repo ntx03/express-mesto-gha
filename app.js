@@ -9,7 +9,7 @@ const serverError = require('./middlewares/serverError');
 const { requestLogger, errorLogger } = require('./middlewares/Logger');
 
 // Слушаем 3000 порт
-const { PORT = 3000 } = process.env;
+const { PORT = 80 } = process.env;
 
 // создаем сервер на фреймворке express
 const app = express();
