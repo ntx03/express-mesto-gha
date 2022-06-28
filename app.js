@@ -8,8 +8,8 @@ const router = require('./routes/index');
 const serverError = require('./middlewares/serverError');
 const { requestLogger, errorLogger } = require('./middlewares/Logger');
 
-// Слушаем 3000 порт
-const { PORT = 80 } = process.env;
+// Слушаем 2000 порт
+const { PORT = 2000 } = process.env;
 
 // создаем сервер на фреймворке express
 const app = express();
@@ -23,13 +23,6 @@ app.use(cors());
 
 // настраиваем заголовки
 app.use(helmet());
-
-// краш-тест сервера
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
 
 // преобразование в строку
 app.use(express.json());
